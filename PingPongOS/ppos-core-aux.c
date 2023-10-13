@@ -6,6 +6,8 @@
 // Coloque aqui as suas modificações, p.ex. includes, defines variáveis, 
 // estruturas e funções
 
+#define DEFAULT_TASK_EXEC_TIME 99999
+
 
 // ****************************************************************************
 
@@ -410,18 +412,17 @@ task_t * scheduler() {
     task_t* task_aux = readyQueue->next;
     task_t* task_menor = readyQueue;
     int menor_ret = readyQueue->ret;
-    
-    printf ("%d\n ", task_aux);
-    printf ("%d\n ", task_aux->next);
-    printf ("%d\n ", task_aux->prev);
 
-    while(task_aux!=NULL || task_aux!=readyQueue){
-        if(task_aux->ret<menor_ret){
+    while(task_aux!=NULL && task_aux!=readyQueue){
+        if(task_aux->ret < menor_ret){
             task_menor = task_aux;
             menor_ret = task_aux->ret; 
         }
         task_aux = task_aux->next;
     }
+
+    task_menor->ret--;
+    task_menor->running_time++;
     return task_menor;
 }
 
