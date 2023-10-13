@@ -396,12 +396,60 @@ int after_mqueue_msgs (mqueue_t *queue) {
     return 0;
 }
 
-task_t * scheduler() {
+task_t * scheduler() {    
     // FCFS scheduler
-    if ( readyQueue != NULL ) {
-        return readyQueue;
+    // if ( readyQueue != NULL ) {
+    //     return readyQueue;
+    // }
+    // return NULL;
+
+    if(readyQueue == NULL){
+          return NULL;
     }
-    return NULL;
+
+    task_t* task_aux = readyQueue->next;
+    task_t* task_menor = readyQueue;
+    int menor_ret = readyQueue->ret;
+    
+    printf ("%d\n ", task_aux);
+    printf ("%d\n ", task_aux->next);
+    printf ("%d\n ", task_aux->prev);
+
+    while(task_aux!=NULL || task_aux!=readyQueue){
+        if(task_aux->ret<menor_ret){
+            task_menor = task_aux;
+            menor_ret = task_aux->ret; 
+        }
+        task_aux = task_aux->next;
+    }
+    return task_menor;
 }
 
+void task_set_eet (task_t *task, int et){
+    if (task == NULL){
+        taskExec->ret = et-taskExec->running_time;
+        taskExec->eet = et;  
+    }
+    else{
+        task->ret = et-task->running_time;
+        task->eet = et;
+    }
+}
 
+int task_get_eet(task_t *task){
+    if (task == NULL){
+        return taskExec->eet;
+    }
+    else{
+        return task->eet;
+    }
+}
+
+int task_get_ret(task_t *task){
+    if (task == NULL){
+        return taskExec->ret;
+    }
+    else{
+        return task->ret;
+    }
+}

@@ -45,6 +45,9 @@ int main (int argc, char *argv[])
 
    ppos_init () ;
 
+   printf ("main: inicio\n");
+
+
    task_create (&Pang, Body, "    Pang") ;
    task_create (&Peng, Body, "        Peng") ;
    task_create (&Ping, Body, "            Ping") ;

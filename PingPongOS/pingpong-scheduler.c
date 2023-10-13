@@ -15,7 +15,7 @@ void Body (void * arg)
 {
   int i ;
 
-  printf ("%s: inicio (prioridade %d)\n", (char *) arg, task_getprio(NULL)) ;
+//  printf ("%s: inicio (prioridade %d)\n", (char *) arg, task_getprio(NULL)) ;
 
   for (i=0; i<10; i++)
   {
@@ -33,19 +33,19 @@ int main (int argc, char *argv[])
   ppos_init () ;
 
   task_create (&Pang, Body, "    Pang") ;
-  task_setprio (&Pang, 0);
+//  task_setprio (&Pang, 0);
 
   task_create (&Peng, Body, "        Peng") ;
-  task_setprio (&Peng, 2);
+//  task_setprio (&Peng, 2);
 
   task_create (&Ping, Body, "            Ping") ;
-  task_setprio (&Ping, 4);
+//  task_setprio (&Ping, 4);
 
   task_create (&Pong, Body, "                Pong") ;
-  task_setprio (&Pong, 6);
+//  task_setprio (&Pong, 6);
 
   task_create (&Pung, Body, "                    Pung") ;
-  task_setprio (&Pung, 8);
+//  task_setprio (&Pung, 8);
 
   task_join(&Pang);
   task_join(&Peng);
