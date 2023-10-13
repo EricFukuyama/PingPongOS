@@ -28,6 +28,8 @@ typedef struct task_t
    int eet;//tempo estimado de execução
    int ret;//termo restante para terminar a execução
    int running_time;//
+   int task_quantum;
+   int user_task;
 
 } task_t ;
 

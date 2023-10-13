@@ -107,6 +107,7 @@ task_t * scheduler() ;
 void task_set_eet (task_t *task, int et);
 int task_get_eet(task_t *task);
 int task_get_ret(task_t *task);
+void interrupt_handler(int signal);
 
 // operações de gestão do tempo ================================================
 

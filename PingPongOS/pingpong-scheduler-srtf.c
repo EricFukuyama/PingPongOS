@@ -71,7 +71,6 @@ int main (int argc, char *argv[])
   printf ("main: inicio\n");
 
   ppos_init () ;
-  printf("Loop iterations to microseconds = %d\n", one_tick);
 
   // waiting for the first microsecond
   while (systime() <= 0) ;
