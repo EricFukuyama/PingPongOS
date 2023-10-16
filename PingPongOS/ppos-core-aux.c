@@ -54,6 +54,9 @@ void before_ppos_init () {
 
 void after_ppos_init () {
     // put your customization here
+    task_set_eet(taskDisp, DEFAULT_TASK_EXEC_TIME);
+    task_set_eet(taskMain, DEFAULT_TASK_EXEC_TIME);
+    taskMain->user_task = 0;
 #ifdef DEBUG
     printf("\ninit - AFTER");
 #endif
@@ -98,6 +101,7 @@ void before_task_switch ( task_t *task ) {
 
 void after_task_switch ( task_t *task ) {
     // put your customization here
+    task->task_quantum = QUANTUM;
 #ifdef DEBUG
     printf("\ntask_switch - AFTER - [%d -> %d]", taskExec->id, task->id);
 #endif
@@ -456,7 +460,7 @@ task_t * scheduler() {
     }
 
     task_menor->ret--;
-    task_menor->running_time++;
+    //task_menor->running_time++;
     return task_menor;
 }
 
@@ -492,12 +496,17 @@ int task_get_ret(task_t *task){
 void interrupt_handler(int signal) {
     systemTime++;
     
+    //printf("usertask %d : %d\n", taskExec->id, taskExec->user_task);
+    //printf("taskEET: %d\n", taskExec->eet);
+
     if(taskExec->user_task) {
         taskExec->task_quantum--;
+        taskExec->running_time++;
     }
 
     if(taskExec->task_quantum == 0) {
-        taskExec->task_quantum = QUANTUM;
+        //taskExec->task_quantum = QUANTUM;
+        //taskExec = taskDisp;
         task_yield();
     }
 

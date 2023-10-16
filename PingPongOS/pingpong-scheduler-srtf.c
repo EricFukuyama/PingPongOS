@@ -47,6 +47,7 @@ void Body (void * arg)
     if ((last_printed_line+5) <= systime()) {
       printf ("[%d]\t%s: interacao %d\t\t%d\n", systime(), (char *) arg, end_time, taskExec->running_time) ;
       last_printed_line = systime();
+      //printf("rnntime: %d eet: %d, id: %d, usertask: %d\n", taskExec->running_time, taskExec->eet, taskExec->id, taskExec->user_task);
     }
 
     if ((last_created_task != systime()) && (systime()%100) == 0) {
