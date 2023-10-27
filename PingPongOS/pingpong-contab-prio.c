@@ -29,8 +29,10 @@ int hardwork (int n)
 // corpo das threads
 void Body (void * arg)
 {
-   printf ("%s: inicio em %4d ms (prio: %d)\n", (char *) arg,
-           systime(), task_getprio(NULL)) ;
+   // printf ("%s: inicio em %4d ms (prio: %d)\n", (char *) arg,
+   //         systime(), task_getprio(NULL)) ;
+   printf ("%s: inicio em %4d ms \n", (char *) arg,
+           systime()) ;
    hardwork (WORKLOAD) ;
    printf ("%s: fim    em %4d ms\n", (char *) arg, systime()) ;
    task_exit (0) ;
@@ -45,23 +47,23 @@ int main (int argc, char *argv[])
    srand(time(NULL));
 
    task_create (&Pang, Body, "    Pang") ;
-   task_setprio (&Pang, 0);
+   // task_setprio (&Pang, 0);
    sleep(rand() % 3);
    
    task_create (&Peng, Body, "        Peng") ;
-   task_setprio (&Peng, -2);
+   // task_setprio (&Peng, -2);
    sleep(rand() % 3);
    
    task_create (&Ping, Body, "            Ping") ;
-   task_setprio (&Ping, -4);
+   // task_setprio (&Ping, -4);
    sleep(rand() % 3);
    
    task_create (&Pong, Body, "                Pong") ;
-   task_setprio (&Pong, -6);
+   // task_setprio (&Pong, -6);
    sleep(rand() % 3);
    
    task_create (&Pung, Body, "                    Pung") ;
-   task_setprio (&Pung, -8);
+   // task_setprio (&Pung, -8);
    sleep(rand() % 3);
    
    task_join(&Pung);

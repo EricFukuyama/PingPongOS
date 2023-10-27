@@ -37,8 +37,6 @@ void before_ppos_init () {
     // ajusta valores do temporizador
     timer.it_value.tv_usec = 1000 ;      // primeiro disparo, em micro-segundos
     timer.it_interval.tv_usec = 1000 ;   // disparos subsequentes, em micro-segundos
-    // timer.it_value.tv_sec  = 3 ;      // primeiro disparo, em segundos
-    // timer.it_interval.tv_sec  = 1 ;   // disparos subsequentes, em segundos
 
     // arma o temporizador ITIMER_REAL (vide man setitimer)
     if (setitimer (ITIMER_REAL, &timer, 0) < 0)
@@ -64,6 +62,7 @@ void after_ppos_init () {
 
 void before_task_create (task_t *task ) {
     // put your customization here
+
 #ifdef DEBUG
     printf("\ntask_create - BEFORE - [%d]", task->id);
 #endif
@@ -71,8 +70,13 @@ void before_task_create (task_t *task ) {
 
 void after_task_create (task_t *task ) {
     // put your customization here
-    task->user_task = 1;
-    task->task_quantum = QUANTUM;
+    if(task->id>=2){
+        task->user_task = 1;
+        task->task_quantum = QUANTUM;
+    }
+    task->init_time=systime();
+    task->activations = 0;
+    task->execution_time=0;
 #ifdef DEBUG
     printf("\ntask_create - AFTER - [%d]", task->id);
 #endif
@@ -80,6 +84,8 @@ void after_task_create (task_t *task ) {
 
 void before_task_exit () {
     // put your customization here
+    taskExec->end_time=systime();
+    taskExec->execution_time=taskExec->end_time-taskExec->init_time;
 #ifdef DEBUG
     printf("\ntask_exit - BEFORE - [%d]", taskExec->id);
 #endif
@@ -87,6 +93,9 @@ void before_task_exit () {
 
 void after_task_exit () {
     // put your customization here
+    printf("Task %d exit: execution time %d ms, processor time %d ms, %d activations\n", taskExec->id, taskExec->execution_time, taskExec->running_time, taskExec->activations);
+    // Task 17 exit: execution time 4955 ms, processor time 925 ms, 171 activations
+
 #ifdef DEBUG
     printf("\ntask_exit - AFTER- [%d]", taskExec->id);
 #endif
@@ -101,7 +110,8 @@ void before_task_switch ( task_t *task ) {
 
 void after_task_switch ( task_t *task ) {
     // put your customization here
-    task->task_quantum = QUANTUM;
+    task->activations++;
+
 #ifdef DEBUG
     printf("\ntask_switch - AFTER - [%d -> %d]", taskExec->id, task->id);
 #endif
@@ -151,7 +161,7 @@ void after_task_resume(task_t *task) {
 
 void before_task_sleep () {
     // put your customization here
-#ifdef DEBUG
+    #ifdef DEBUG
     printf("\ntask_sleep - BEFORE - [%d]", taskExec->id);
 #endif
 }
@@ -460,7 +470,7 @@ task_t * scheduler() {
     }
 
     task_menor->ret--;
-    //task_menor->running_time++;
+
     return task_menor;
 }
 
@@ -495,9 +505,6 @@ int task_get_ret(task_t *task){
 
 void interrupt_handler(int signal) {
     systemTime++;
-    
-    //printf("usertask %d : %d\n", taskExec->id, taskExec->user_task);
-    //printf("taskEET: %d\n", taskExec->eet);
 
     if(taskExec->user_task) {
         taskExec->task_quantum--;
@@ -505,8 +512,7 @@ void interrupt_handler(int signal) {
     }
 
     if(taskExec->task_quantum == 0) {
-        //taskExec->task_quantum = QUANTUM;
-        //taskExec = taskDisp;
+        taskExec->task_quantum = QUANTUM;
         task_yield();
     }
 
