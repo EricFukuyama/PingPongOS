@@ -55,6 +55,7 @@ void after_ppos_init () {
     task_set_eet(taskDisp, DEFAULT_TASK_EXEC_TIME);
     task_set_eet(taskMain, DEFAULT_TASK_EXEC_TIME);
     taskMain->user_task = 0;
+    printf("PPOS intialized successfully...\n");
 #ifdef DEBUG
     printf("\ninit - AFTER");
 #endif
@@ -92,7 +93,7 @@ void before_task_exit () {
 
 void after_task_exit () {
     // put your customization here
-    printf("Task %d exit: execution time %d ms, processor time %d ms, %d activations\n", taskExec->id, taskExec->execution_time, taskExec->running_time, taskExec->activations);
+    printf("\nTask %d exit: execution time %d ms, processor time %d ms, %d activations\n", taskExec->id, taskExec->execution_time, taskExec->running_time, taskExec->activations);
     // Task 17 exit: execution time 4955 ms, processor time 925 ms, 171 activations
 
 #ifdef DEBUG
